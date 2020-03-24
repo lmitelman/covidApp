@@ -1,0 +1,34 @@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">CovidApp</h1>
+        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+    </div>
+</div>
+
+<div *ngIf="loading == true" class="alert alert-info text-center m-3 animated fadeIn" role="alert">
+    <h4 class="alert-heading">Loading</h4>
+    <p>
+        <i class="fa fa-sync-alt fa-spin fa-2x"></i>
+    </p>
+</div>
+
+<table *ngIf="loading == false" class="table">
+    <thead class="thead-light titulo">
+        <tr>
+            <th scope="col">Country</th>
+            <th scope="col">Total cases</th>
+            <th scope="col">Critical cases</th>
+            <th scope="col">Deaths</th>
+            <th scope="col">Last update</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let country of covidGlobalCases">
+            <th scope="row">{{country.country}}</th>
+            <td>{{country.cases.total}}</td>
+            <td>{{country.cases.critical}}</td>
+            <td>{{country.deaths.total}}</td>
+            <td>{{country.day}}</td>
+        </tr>
+    </tbody>
+</table>
