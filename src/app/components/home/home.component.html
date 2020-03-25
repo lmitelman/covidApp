@@ -1,9 +1,20 @@
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <h1 class="display-4">CovidApp</h1>
-        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+<div *ngIf="loading == false" class="jumbotron jumbotron-fluid py-0">
+    <div class="d-flex justify-content-center data py-5">
+        <div class="d-flex flex-column mx-5 my-3 align-items-center text-warning">
+            <h1>{{worldCases}}</h1>
+            <h5>Cases</h5>
+        </div>
+        <div class="d-flex flex-column mx-5 my-3 align-items-center text-danger">
+            <h1>{{worldDeaths}}</h1>
+            <h5>Deaths</h5>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <p>Update: {{lastUpdate | date: 'dd/MM/yyyy hh:mm:ss'}}</p>
     </div>
 </div>
+
+<app-graph *ngIf="loading == false" [covidGlobalCases]="covidGlobalCases"></app-graph>
 
 <div *ngIf="loading == true" class="alert alert-info text-center m-3 animated fadeIn" role="alert">
     <h4 class="alert-heading">Loading</h4>
@@ -12,23 +23,30 @@
     </p>
 </div>
 
-<table *ngIf="loading == false" class="table">
+<div *ngIf="loading == false" class="dropdown d-flex mb-2 justify-content-end">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Order by
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" [ngClass]="{'disabled': disabledAlpha}" (click)="sortAlpha()">A - Z</a>
+        <a class="dropdown-item" [ngClass]="{'disabled': disabledMore}" (click)="sortPlusCases()">More cases</a>
+    </div>
+</div>
+
+<table *ngIf="loading == false" class="table" data-align="right">
     <thead class="thead-light titulo">
         <tr>
             <th scope="col">Country</th>
-            <th scope="col">Total cases</th>
-            <th scope="col">Critical cases</th>
+            <th scope="col">Cases</th>
             <th scope="col">Deaths</th>
-            <th scope="col">Last update</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let country of covidGlobalCases">
             <th scope="row">{{country.country}}</th>
-            <td>{{country.cases.total}}</td>
-            <td>{{country.cases.critical}}</td>
-            <td>{{country.deaths.total}}</td>
-            <td>{{country.day}}</td>
+            <td class="text-left">{{country.cases.total}}</td>
+            <td class="text-left">{{country.deaths.total}}</td>
         </tr>
     </tbody>
 </table>
