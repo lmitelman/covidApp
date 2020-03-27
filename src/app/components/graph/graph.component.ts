@@ -16,7 +16,6 @@ export class GraphComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit() {
-		console.log(this.covidGlobalCases);
 		for (let i = 0; i < 5; i++) {
 			let country = this.covidGlobalCases[i];
 			this.pieChartLabels.push(country.country);

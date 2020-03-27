@@ -27,17 +27,25 @@ export class HomeComponent implements OnInit {
 					let country = this.covidGlobalCases[i];
 					country.totalCases = country.cases.total;
 					this.lastUpdate = country.time;
-					if (country.country == "All") {
+					if (country.country == "All" ) {
 						this.worldCases = country.cases.total;
 						this.worldDeaths = country.deaths.total;
+						this.covidGlobalCases.splice(i, 1);
+					}
+				}
+				for (let i = 0; i < this.covidGlobalCases.length; i++) {
+					let country = this.covidGlobalCases[i];
+					if (country.country == "Mozambique" ) {
 						this.covidGlobalCases.splice(i, 1);
 					}
 				}
 				console.log("Total world cases: " + this.worldCases);
 				console.log("Total world deaths: " + this.worldDeaths);
 				this.loading = false;
+				console.log(this.covidGlobalCases);
+				this.sortPlusCases();
+				console.log(this.covidGlobalCases);
 			});
-
 	}
 
 	/** This function allows you to sort an object list by an object property. */
@@ -64,10 +72,5 @@ export class HomeComponent implements OnInit {
 		this.covidGlobalCases.reverse();
 		this.disabledAlpha = false;
 		this.disabledMore = true;
-	}
-
-	sortMinusCases() {
-		this.covidGlobalCases.sort(this.dynamicSort("totalCases"));
-		// this.covidGlobalCases.reverse();
 	}
 }
