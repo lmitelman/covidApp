@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
 	worldDeaths: number;
 	disabledAlpha: boolean = false;
 	disabledMore: boolean = true;
+	disabledDeaths: boolean = false;
 	lastUpdate: Date;
 
 	constructor(private covid: CovidService) { }
@@ -22,27 +23,22 @@ export class HomeComponent implements OnInit {
 		this.loading = true;
 		this.covid.getAllCountries()
 			.subscribe((response: any) => {
-				this.covidGlobalCases = response.response;
-				for (let i = 0; i < this.covidGlobalCases.length; i++) {
-					let country = this.covidGlobalCases[i];
+				for (let i = 0; i < response.response.length; i++) {
+					let country = response.response[i];
 					country.totalCases = country.cases.total;
+					country.totalDeaths = country.cases.deaths;
 					this.lastUpdate = country.time;
-					if (country.country == "All" ) {
+					if (country.country == "All") {
 						this.worldCases = country.cases.total;
 						this.worldDeaths = country.deaths.total;
-						this.covidGlobalCases.splice(i, 1);
-					}
-				}
-				for (let i = 0; i < this.covidGlobalCases.length; i++) {
-					let country = this.covidGlobalCases[i];
-					if (country.country == "Mozambique" ) {
-						this.covidGlobalCases.splice(i, 1);
+					} else if (country.country != "Europe" && country.country != "Asia" && country.country != "North-America"
+						&& country.country != "South-America" && country.country != "Oceania" && country.country != "Africa") {
+						this.covidGlobalCases.push(country);
 					}
 				}
 				console.log("Total world cases: " + this.worldCases);
 				console.log("Total world deaths: " + this.worldDeaths);
 				this.loading = false;
-				console.log(this.covidGlobalCases);
 				this.sortPlusCases();
 				console.log(this.covidGlobalCases);
 			});
@@ -65,6 +61,7 @@ export class HomeComponent implements OnInit {
 		this.covidGlobalCases.sort(this.dynamicSort("country"));
 		this.disabledAlpha = true;
 		this.disabledMore = false;
+		this.disabledDeaths = false;
 	}
 
 	sortPlusCases() {
@@ -72,5 +69,14 @@ export class HomeComponent implements OnInit {
 		this.covidGlobalCases.reverse();
 		this.disabledAlpha = false;
 		this.disabledMore = true;
+		this.disabledDeaths = false;
 	}
+
+	// sortPlusDeaths() {
+	// 	this.covidGlobalCases.sort(this.dynamicSort("totalDeaths"));
+	// 	this.covidGlobalCases.reverse();
+	// 	this.disabledAlpha = false;
+	// 	this.disabledMore = false;
+	// 	this.disabledDeaths = true;
+	// }
 }
